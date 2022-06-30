@@ -89,7 +89,7 @@ secondChild.style.color='blue';//it will not work as secondChild is a nodelist,w
 
 //   TRAVERSING DOM   //
 
-var itemList = document.querySelector('#items');
+//var itemList = document.querySelector('#items');
 
 //parentNode
 //console.log(itemList.parentNode);
@@ -174,7 +174,7 @@ length: 9
 
 
 //createElement
-
+/*
 //create div
 var newDiv=document.createElement('div');
 
@@ -205,6 +205,77 @@ console.log(container);
 container.insertBefore(newDiv,h1);
 
 */
+
+
+ var form=document.getElementById('addForm');
+ var itemList=document.getElementById('items');
+
+ //form submit event
+form.addEventListener('submit',addItem);
+
+//delete event
+itemList.addEventListener('click',removeItem);
+
+// Add item
+function addItem(e){
+    e.preventDefault();
+
+    //Get input value
+    var newItem=document.getElementById('item').value;
+
+    // Create a new li element
+    var li=document.createElement('li');
+
+    //Add a class
+    li.className= 'list-group-item';
+
+    //Add text node with input value
+    li.appendChild(document.createTextNode(newItem));
+
+    // Create delete button element
+    var deleteBtn= document.createElement('button');
+
+    //Add classes to del button
+    deleteBtn.className= 'btn btn-danger btn-sm float-right delete';
+
+    //Append text node
+    deleteBtn.appendChild(document.createTextNode('X'));
+
+
+    //create a edit button
+    var editBtn=document.createElement('button');
+
+    //add a class
+    editBtn.className='btn btn-danger btn-sm float-right edit mr-1';//mr -1 give space b/w two button
+
+    //append text node
+    editBtn.appendChild(document.createTextNode('E'));
+
+    //apped del and edit button to li
+    li.appendChild(deleteBtn);
+    li.appendChild(editBtn);
+
+
+
+    //append li to ul
+    itemList.appendChild(li);
+
+}
+
+//Remove item
+function removeItem(e){
+    if(e.target.classList.contains('delete')){
+        if(confirm('Are you Sure?')){
+            var li=e.target.parentElement;
+            itemList.removeChild(li);
+        }
+    }
+}
+
+
+
+
+
 
 
 
