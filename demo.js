@@ -144,7 +144,8 @@ length: 9
 
 //itemList.firstElementChild.textContent='HELLLLLOOOO';
 
-
+//its a good learning as children[0] and firstElementChild is same as they both refer to the first element(not any text),but firstChild refers
+        //to both the text and elements under it. 
 
 
 //  lastChild
@@ -207,7 +208,7 @@ container.insertBefore(newDiv,h1);
 
 
 //new html is added
-
+/*
  var form=document.getElementById('addForm');
  var itemList=document.getElementById('items');
 
@@ -310,8 +311,9 @@ function filterItems(e){
     Array.from(items).forEach(function(item){
         console.log(item);
         var itemName=item.firstChild.textContent;
-        var itemdesc=item.children[0].textContent;
-
+        var itemdesc=item.children[0].textContent;// here we can write this line also--> var itemdesc1=item.firstElementChild.textContent;
+        //its a good learning as children[0] and firstElementChild is same as they both refer to the first element(not any text),but firstChild refers
+        //to both the text and elements under it. 
         console.log(itemName);
         console.log(itemdesc);
         if(itemName.toLowerCase().indexOf(text) != -1 || itemdesc.toLowerCase().indexOf(text) != -1){//if both of them does not match then it returns -1
@@ -326,5 +328,5 @@ function filterItems(e){
 }
 
 
-
+*/
 
