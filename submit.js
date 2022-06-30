@@ -336,6 +336,7 @@ nameInput.addEventListener('input', e => {
 
 // Put DOM elements into variables
 //localStorage.setItem('nameinp','email');
+
 const myForm = document.querySelector('#my-form');
 const nameInput = document.querySelector('#name');
 const emailInput = document.querySelector('#email');
@@ -344,7 +345,7 @@ const userList = document.querySelector('#users');
 
 // Listen for form submit
 myForm.addEventListener('submit', onSubmit);
-
+/*
 function onSubmit(e) {
   e.preventDefault();
   
@@ -369,10 +370,90 @@ function onSubmit(e) {
     userList.appendChild(li);
 
     //localStorage.setItem('nameinp:nameInput','email:emailInput');
-    localStorage.setItem(nameInput.value,emailInput.value);
+    localStorage.setItem(nameInput.value,emailInput.value);//in localStorage we can only store data as a string
+
     // Clear fields
     nameInput.value = '';
     emailInput.value = '';
     
   }
 }
+*/
+
+
+function onSubmit(e) {
+    e.preventDefault();
+    
+    if(nameInput.value === '' || emailInput.value === '') {
+      // alert('Please enter all fields');
+      msg.classList.add('error');
+      msg.innerHTML = 'Please enter all fields';
+  
+      // Remove error after 3 seconds
+      setTimeout(() => msg.remove(), 3000);
+    } else {
+
+      let myobj={
+        nam:nameInput.value,
+        email:emailInput.value
+      }
+
+      localStorage.setItem('myobj',JSON.stringify(myobj));
+      var getItem=localStorage.getItem('myobj');
+      var getitemobj=JSON.parse(getItem);
+      var getitemobjname=getitemobj.nam;
+      var getitemobjemail=getitemobj.email;
+      //console.log(getitemobj.nam);
+
+
+      // Create new list item with user
+      
+      const li = document.createElement('li');
+  
+      // Add text node with input values
+      li.appendChild(document.createTextNode(`${getitemobjname}: ${getitemobjemail}`));
+  
+      // Add HTML
+      // li.innerHTML = `<strong>${nameInput.value}</strong>e: ${emailInput.value}`;
+  
+      // Append to ul
+      userList.appendChild(li);
+  
+      //localStorage.setItem('nameinp:nameInput','email:emailInput');
+      //localStorage.setItem(nameInput.value,emailInput.value);//in localStorage we can only store data as a string
+  
+      // Clear fields
+      nameInput.value = '';
+      emailInput.value = '';
+      
+    }
+  }
+
+
+
+
+
+/*
+//in localStorage we can only store data as a string,it does not accept any other thing
+//let 's see a demonstration
+var obj ={
+    name:'KAustav',
+    sur:'paul'
+};
+//localStorage.setItem("myobj",obj);
+//console.log(localStorage);//you can see in in value its showing [object object],i.e, just a useless string,so we need  to typecast the object to a string
+//console.log(localStorage.getItem("myobj").name);//we get undefined as a value,so the object is not actually being stored
+//we need to use json to serialize the object and represent it as a string
+
+let myobj_serialized=JSON.stringify(obj);
+
+localStorage.setItem("myobj",myobj_serialized);
+//console.log(localStorage);
+
+//now i want to use that object which we coverted to string previously
+//to use that string we can covert it to object again
+//process to convert a string to object 
+
+let myobj_deserialized= JSON.parse(localStorage.getItem("myobj"));
+console.log(myobj_deserialized);//here we got a normal javascript object
+*/
