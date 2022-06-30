@@ -83,9 +83,8 @@ secondChild[1].style.color="red";
 console.log(secondChild);//its a nodelist
 secondChild.style.color='blue';//it will not work as secondChild is a nodelist,we need to do upper method to change it*/
 
-//when we have nodelist then directly we cant directly manupulate,we need manupulate by indexwise
-
-
+//when we have object type  nodelist then directly we can directly manupulate,we  manupulate by indexwise
+//if we have a object type htmlCollection then directly we can't manupulate,first we need to convert it to arraytype,then we  can do array operations.
 
 //   TRAVERSING DOM   //
 
@@ -207,6 +206,8 @@ container.insertBefore(newDiv,h1);
 */
 
 
+//new html is added
+
  var form=document.getElementById('addForm');
  var itemList=document.getElementById('items');
 
@@ -223,14 +224,25 @@ function addItem(e){
     //Get input value
     var newItem=document.getElementById('item').value;
 
+    var newItemArray=newItem.split('.');
+    //console.log(newItemArray);
+    var newItemName=newItemArray[0];
+    var newItemDesc=newItemArray[1];
+    
+    //console.log(newConcatItem);
+    var div=document.createElement('div');
+    div.appendChild(document.createTextNode(newItemDesc));
+    
     // Create a new li element
     var li=document.createElement('li');
 
     //Add a class
     li.className= 'list-group-item';
 
+
     //Add text node with input value
-    li.appendChild(document.createTextNode(newItem));
+    li.appendChild(document.createTextNode(newItemName));
+    li.appendChild(div);
 
     // Create delete button element
     var deleteBtn= document.createElement('button');
@@ -272,10 +284,46 @@ function removeItem(e){
     }
 }
 
+//when we have object type  nodelist then directly we can directly manupulate,we  manupulate by indexwise
+//if we have a object type htmlCollection then directly we can't manupulate,first we need to convert it to arraytype,then we  can do array operations.
 
 
+//Filter Items
+
+var filter=document.getElementById('filter');
+
+filter.addEventListener('keyup',filterItems);
 
 
+function filterItems(e){
+
+    //convert text to lowercase
+    var text=e.target.value.toLowerCase();
+
+    //get lis
+    var items=document.getElementsByTagName('li');
+
+    //console.log(items);
+    //as items is HTMLCOLLECTION,so we are converting it array to do the operations
+
+    //Convert to an array
+    Array.from(items).forEach(function(item){
+        console.log(item);
+        var itemName=item.firstChild.textContent;
+        var itemdesc=item.children[0].textContent;
+
+        console.log(itemName);
+        console.log(itemdesc);
+        if(itemName.toLowerCase().indexOf(text) != -1 || itemdesc.toLowerCase().indexOf(text) != -1){//if both of them does not match then it returns -1
+            item.style.display='block';
+        }else{
+            item.style.display='none';
+        }
+
+    })
+
+
+}
 
 
 
