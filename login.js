@@ -6,19 +6,53 @@ var submitButton=document.getElementById('submit');
 
 
 
-if(document.readyState === "loading"){
-    var keys=Object.keys(localStorage);//taking out all the keys that are there in the local storage
-    var i=keys.length;
-    Object.keys(localStorage).forEach((key) => {
-        if(key.match(/user/g)){
-            var stringDetailOfPeople = localStorage.getItem(key);
-            console.log(stringDetailOfPeople);
-            var ObjDetailOfPeople= JSON.parse(stringDetailOfPeople);
-            addNewLineElement(ObjDetailOfPeople);
-        }
-    });
+window.addEventListener("DOMContentLoaded", () => {
+    const localStorageObj = localStorage;
+    const localstoragekeys  = Object.keys(localStorageObj)
 
+    for(var i =0; i< localstoragekeys.length; i++){
+        const key = localstoragekeys[i]
+        const userDetailsString = localStorageObj[key];
+        console.log(userDetailsString);
+        const userDetailsObj = JSON.parse(userDetailsString);
+        showNewUserOnScreen(userDetailsObj);
+    }
+});
+
+function showNewUserOnScreen(user)
+{
+    const parentNode=document.getElementById('listofpeople');
+    const childHtml=`<li id = ${user.emailId}> ${user.nameId} - ${user.emailId}
+                        <button onclick=deleteUser('${user.emailId}') > Delete User </button>
+                        <button onclick=editUser('${user.emailId}','${user.nameId}') >Edit User </button>
+                        </li>`;
+    parentNode.innerHTML=parentNode.innerHTML+childHtml;
+                        
 }
+
+function deleteUser(emailId)
+{
+    localStorage.removeItem(emailId);
+    removeFromScreen(emailId);
+}
+function removeFromScreen(emailId)
+{
+    const parentNode=document.getElementById('listofpeople');
+    const childNode=document.getElementById(emailId);
+    parentNode.removeChild(childNode);
+}
+
+function editUser(emailId,nameId)
+{
+    //console.log(JSON.parse(localStorage.getItem(emailId)).nameId);
+    document.getElementById('name').value=nameId;
+    document.getElementById('email').value=emailId;
+    const parentNode=document.getElementById('listofpeople');
+    const childNode=document.getElementById(emailId);
+    parentNode.removeChild(childNode);
+}
+
+
 submitButton.addEventListener("click", (e) => {
 
     e.preventDefault();
@@ -31,7 +65,7 @@ submitButton.addEventListener("click", (e) => {
             nameId:nameId,
             emailId:emailId
         };
-        localStorage.setItem('user'+emailId , JSON.stringify(obj));
+        localStorage.setItem(emailId , JSON.stringify(obj));
         //console.log(nameId);
         addNewLineElement(obj);
     }
@@ -46,5 +80,4 @@ function addNewLineElement(obj)
     li.appendChild(document.createTextNode(obj.nameId + '    '+obj.emailId));
     ul.appendChild(li);
    // console.log(obj.nameId + '    '+obj.emailId);
-
 }
