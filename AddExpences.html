@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -9,18 +8,9 @@
     <link rel="stylesheet" href="hp.css">
   </head>
   <body>
-    <header>
-      <h1>Appointment Booking App</h1>
-    </header>
     <form action="#">
-      <!--
-      <input type="text" id="name">
-      <input type="text" id="email">
-      <input type="submit" id="submit" value="submit">
-      <button id ="clickme" >click me</button>
-      -->
-      Choose description : <input type="text" id="desc">
-      Choose expence amount: <input type="number" id="expence" min="0" max="1000" step="10" value="30">
+      Choose expence amount : <input type="text" id="expence">
+      Choose description: <input type="number" id="desc" min="0" max="1000" step="10" value="30">
       Choose a category : 
       <select id = 'type'>
         <option value="fuel">fuel</option>
@@ -29,6 +19,6 @@
       <button id ="addExpences" >Add Expences</button>
     </form>
     <ul id="listofpeople" ></ul>
-    <script src="expenceCalculater.js"></script>
+    <script src="hoisting.js"></script>
   </body>
 </html>
