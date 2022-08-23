@@ -148,10 +148,11 @@ qs.displayQueue();
 console.log(qs.pop());
 */
 
-////---------------------------------------------------------------------------------------------
+////--------------------------------------------------CALLBACK-------------------------------------------
 
 //new date() will give you cuurrenty date and current timestamp
 //new Date().getTime() will give you current time in millisecond,you can check it in console of browser also
+/*
 const posts=[
     {title:'Post one',body:'This is post one',CreatedAt:new Date().getTime()},
     {title:'Post two',body:'this is post two',CreatedAt:new Date().getTime()}
@@ -159,7 +160,12 @@ const posts=[
 let intervalId;
 function getPosts() {
     clearInterval(intervalId);
-    intervalId = setInterval (() => {//setInterval is called 2 times when two times 
+    intervalId = setInterval (() => {//setInterval is called 2 times when two times getPosts is called,it runs like a a eternal loop in every 1 sec
+                                        // interval ,you can try on console log,by using clearInterval() we are deleting old intervalId,i.e,
+                                        //when 2nd time getPosts() is called ,it clears the intervalId which was created first time.
+                                        //.each 
+                                        //time setInterval() is called,it create a intervalId
+
         let output = '';
         posts.forEach((post) => {
             output+=`<li>${post.title} - last updated ${(new Date().getTime() - post.CreatedAt)/1000} seconds ago</li>`;
@@ -185,7 +191,7 @@ function create4thPost(post,callback) {
    callback(post,getPosts);
 }
 */
-
+/*
 function create4thPost(post,callback) {
     setTimeout(() => {
         posts.push({...post,CreatedAt: new Date().getTime()});
@@ -193,6 +199,155 @@ function create4thPost(post,callback) {
     },6000);
 }
 create4thPost({title:'Post four',body:'this is post four'},getPosts)
-
+*/
 //delivarable 3
 
+///-------------------PROMISE---------------------
+
+
+
+//When you want to resolve a promise successfully,you need to call resolve,when there is some error occurs,you call reject
+/*
+const posts=[
+    {title:'Post one',body:'This is post one'},
+    {title:'Post two',body:'this is post two'}];
+
+function getPosts() {
+    setTimeout(() => {
+        let output = '';
+        posts.forEach((post) => {
+            output+=`<li> ${post.title}</li>`;
+
+        });
+        document.body.innerHTML=output;
+    },1000);
+}
+//getPosts();
+
+
+function createPost(post) {
+    return new Promise((resolve,reject) => {
+        setTimeout(() => {
+            posts.push(post);
+            const error=false;
+            if(!error)
+            {
+                resolve();
+            }
+            else{
+                reject('Error:something went wrong');
+            }
+        },1000);
+    });
+}
+
+//createPost({title:'Post three',body:'This is post three'}).then(getPosts).catch(err => console.log(err));
+
+function deletePost(){
+    var error=false;
+    return new Promise((resolve,reject) => {
+        setTimeout(() => {
+            posts.pop();
+            if(posts.length==0)
+            error=true;
+        
+            if(!error)
+            {
+                resolve();
+            }
+            else{
+                reject('Array is empty now');
+            }
+        },3000);
+      
+    });
+    
+}
+/*
+
+function getPosts() {
+    return new Promise((resolve,reject) => {
+        setTimeout(() => {
+            let output = '';
+            posts.forEach((post) => {
+                output+=`<li> ${post.title}</li>`;
+    
+            });
+            document.body.innerHTML=output;
+            var error=false;
+            if(!error){
+                resolve();
+            }
+            else
+            {
+                reject();
+            }
+        });
+    });
+
+}
+*/
+//getPosts();
+//deletePost().then(getPosts).catch(err => console.log(err));
+//deletePost().then(getPosts).catch(err => console.log(err));
+//deletePost().then(getPosts).catch(err => console.log(err));
+
+////4)Try creating a post and deleting at the same time, how would you do it(Think!!!)
+
+/*
+createPost({title:'Post three',body:'This is post three'}).then(() => {
+    getPosts();
+    
+    deletePost().then(() => {
+        getPosts();
+    })
+    
+})
+
+*/
+
+////let's see when we have to use lots of promises the how we can tackle it
+/*
+const promise1 = Promise.resolve('hello world');
+const promise2 = 10;
+const promise3 = new Promise((resolve, reject) =>
+    setTimeout(resolve,2000,'Goodbye')
+);
+
+Promise.all([promise1,promise2,promise3]).then(values => console.log(values));//you can see after 2 sec all put in console,for last promises 
+//all promises need to wait,promiss.all is basically used when all the promises is resolved then it use the 'then' part.
+*/
+
+
+const user = {
+    name:'Kaustav',
+    time:'0'
+}
+
+
+const createPost = function() {
+    return new Promise((resolve,reject) => {
+        setTimeout(() => {
+            //posts.push(post);
+            const error=false;
+            if(!error)
+            {
+                resolve(user.name);
+            }
+            else{
+                reject('Error:something went wrong');
+            }
+        },1000);
+    });
+}
+
+const updateLastUserActivityTime = function(){
+    return new Promise((resolve,reject) => {
+        setTimeout(() => {
+            user.time = new Date().getTime();
+            resolve(user.time)
+        },1000)
+    })
+}
+
+Promise.all([createPost(),updateLastUserActivityTime()]).then(values => console.log(values));
