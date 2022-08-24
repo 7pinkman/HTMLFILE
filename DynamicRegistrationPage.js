@@ -318,7 +318,7 @@ Promise.all([promise1,promise2,promise3]).then(values => console.log(values));//
 //all promises need to wait,promiss.all is basically used when all the promises is resolved then it use the 'then' part.
 */
 
-
+/*
 const user = {
     name:'Kaustav',
     time:'0'
@@ -350,4 +350,171 @@ const updateLastUserActivityTime = function(){
     })
 }
 
-Promise.all([createPost(),updateLastUserActivityTime()]).then(values => console.log(values));
+Promise.all([createPost(),updateLastUserActivityTime()]).then(values => console.log(values));//You should pass the promise returned from that function
+//promise are better than callback as it makes the code simple and easy to understand,and later point of time if we want to add any property 
+//then promises help us to write more efficient code than callback.
+
+*/
+////////////////////////////////------ASYNC WAIT---------------///////////////////
+
+/*
+console.log('person1 : shows ticket');
+
+const promisewifeBringingTickets = new Promise((resolve,reject) => {
+    setTimeout(() => {
+        resolve('ticket');
+    },3000)
+});
+
+const getPopcorn = promisewifeBringingTickets.then((t) =>{
+    console.log('wife: i have the '+t);
+    console.log('husband: we should go in');
+    console.log('wife: let"s eat popcorn');
+    return new Promise((resolve,reject) => resolve(`${t} popcorn`));
+});
+
+const getButter = getPopcorn.then((t) =>{
+    console.log('husband: ok!  ');
+    console.log('wife: no i need butter on my popcorn');
+    return new Promise((resolve,reject) => resolve(`${t} butter`));
+});
+
+const getColdDriks = getButter.then((t) => {
+    console.log('husband:I want cold drinks')
+    return new Promise((resolve,reject) => resolve(`${t} cold Drinks`))
+})
+
+getColdDriks.then((t) => console.log(t));
+
+console.log('person2 : shows ticket')
+
+//above code can be written using async by more efficient wahy
+
+/*
+We all know that JavaScript is Synchronous in nature which means that it has an event loop that allows you to queue up an action that won’t take place until the 
+loop is available sometime after the code that queued the action has finished executing.
+But there’s a lot of functionalities in our program which makes our code Asynchronous and one of them is the Async/Await functionality. Async/Await is the 
+extension of promises which we get as a support in the language. 
+Async: It simply allows us to write promises based code as if it was synchronous and it checks that we are not breaking the execution thread. 
+It operates asynchronously via the event-loop. Async functions will always return a value. It makes sure that a promise is returned and 
+if it is not returned then JavaScript automatically wraps it in a promise which is resolved with its value.
+Await: Await function is used to wait for the promise. It could be used within the async block only. It makes the code wait until the promise returns a result.
+It only makes the async block wait.
+
+
+*/
+/*
+const preMovie = async() => 'preMovie'//unlike normal function async function always return a promise,by using async keyword we can make
+// a async function,the function return 'preMovie'
+preMovie().then((m) => console.log(m));
+*/
+
+/*
+
+console.log('person1 : shows ticket');
+
+const preMovie = async() => {
+    const promisewifeBringingTickets = new Promise((resolve,reject) => {
+        setTimeout(() => resolve('ticket'), 3000);
+    });
+
+    const getPopcorn = new Promise((resolve,reject) => resolve(`popcorn`));
+
+    const addButter = new Promise((resolve,reject) => resolve(`butter`));
+
+    const addColdDrinks = new Promise((resolve,reject) => resolve('cold Drinks'));
+
+    let ticket = await promisewifeBringingTickets;//whatever resolve by promisewifeBringingTickets,we will get here
+    //await function only works inside async function
+    //inside the async function you can tell the promise execution to wait for the next execution to happen,wait works by using awaits keyword   
+    console.log(`wife: i have the ${ticket}`);
+    console.log('husband: we should go in');
+    console.log('wife: let"s eat popcorn');
+
+    let popcorn=await getPopcorn;
+    console.log(`husband: i got some ${popcorn}`);
+    console.log('husband: we should go in  ');
+    console.log('wife: no i need butter on my popcorn');
+    
+    let butter = await addButter;
+
+    console.log(`husband: i got some ${butter} on popcorn `);
+    console.log('husband: we should go in  ');
+
+    let coldDrinks = await addColdDrinks;
+    lconsole.log('husband:I want cold drinks');
+
+    return ticket;
+
+    
+}
+
+preMovie().then((m) => console.log(`person2 : shows ${m}`));
+
+console.log('person3 : shows ticket');
+
+
+
+*/
+
+//when no dependency is present for all the promises,and one at a time we need to execute all the promises
+
+/*
+const preMovie = async() => {
+    const promisewifeBringingTickets = new Promise((resolve,reject) => {
+        setTimeout(() => resolve('ticket'), 3000);
+    });
+
+    const getPopcorn = new Promise((resolve,reject) => resolve(`popcorn`));
+
+    const getCandy = new Promise((resolve,reject) => resolve(`candy`));
+
+    const getCoke = new Promise((resolve,reject) => resolve('coke'));
+
+    let ticket= await promisewifeBringingTickets;
+
+    let [popcorn,candy,coke] = await Promise.all([getPopcorn,getCandy,getCoke]);//as it return 3 value,so we need a array to store it
+
+    console.log(`${popcorn} ,${candy} ,${coke}`);
+
+
+
+    return ticket;
+
+    
+}
+
+preMovie().then((m) => console.log(`person3 : shows ${m}`));
+
+*/
+
+//let's say there is some error happened when calling the promises,then in async wait we can't catch error 
+//like the previous way,so here we can use normal try catch block to handle error
+
+const preMovie = async() => {
+    const promisewifeBringingTickets = new Promise((resolve,reject) => {
+        setTimeout(() => reject('ticket'), 3000);
+    });
+
+    let ticket;
+
+    try{
+        ticket=await promisewifeBringingTickets;
+    }
+    catch(e){
+        ticket='sad face';
+    }
+
+
+
+    return ticket;
+}
+preMovie().then((m) => console.log(`person3 : shows ${m}`));
+
+//////////////////////////////////////////////////////////////////////////////
+/*
+callback vs promise vs async Wait
+
+in callback we need to disturb other function,this problem is solved by promises.
+async wait is better than promises as async wait use promises in background,basically async wait is used to do better way of writing code.
+*/
