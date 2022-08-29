@@ -31,7 +31,7 @@ window.addEventListener("DOMContentLoaded", () => {
                 console.log(error);
             })
     //after calling get(),let's say we  got responce after 1 min and in our application 4 get call is there,so is it like 4 min wasted?No,as js waits
-    //for none,its a async call,so after 1 sec the responce came in microstack queue and then event loop do its job,same old concept.
+    //for none,its a async call,so js put the request to  microstack queue and then event loop do its job,same old concept.
     //if we write  const data =axios.get("https://crudcrud.com/api/9e283281ad7146afb6b312ccad75f6f3/appointmentData")
     //and do console.log(data),then in console we only got promise,we did not got any data.
 });
@@ -42,7 +42,7 @@ function showNewUserOnScreen(user)
     const parentNode=document.getElementById('listofpeople');
     const childHtml=`<li id = ${user._id}> ${user.nameId} - ${user.emailId}
                         <button onclick=deleteUser('${user._id}') > Delete User </button>
-                        <button onclick=editUser('${user.emailId}','${user.nameId}') >Edit User </button>
+                        <button onclick=editUser('${user._id}','${user.emailId}','${user.nameId}') >Edit User </button>
                         </li>`;
     parentNode.innerHTML=parentNode.innerHTML+childHtml;
                         
@@ -69,15 +69,24 @@ function removeFromScreen(id)
     parentNode.removeChild(childNode);
 }
 
-function editUser(emailId,nameId)
+function editUser(id,emailId,nameId)
 {
     //console.log(JSON.parse(localStorage.getItem(emailId)).nameId);
-    localStorage.removeItem(emailId);
+    //localStorage.removeItem(emailId);
+    axios.delete(`https://crudcrud.com/api/9e283281ad7146afb6b312ccad75f6f3/appointmentData/${id}`)
+        .then((responce) => {
+            removeFromScreen(id);
+        })
+        .catch((err) => {
+            console.log(err)
+        })
     document.getElementById('name').value=nameId;
     document.getElementById('email').value=emailId;
+    /*
     const parentNode=document.getElementById('listofpeople');
     const childNode=document.getElementById(emailId);
     parentNode.removeChild(childNode);
+    */
     
 
     
@@ -121,3 +130,22 @@ function addNewLineElement(obj)
     ul.appendChild(li);
    // console.log(obj.nameId + '    '+obj.emailId);
 }
+
+
+//.then with setTimeout,.then always used with promises
+/*
+console.log("a");
+console.log("b");
+new Promise((resolve, reject) => {
+    setTimeout(() => resolve('c'), 4000)
+}).then(data => {
+    console.log(data);
+    new Promise((resolve,reject) => {
+        setTimeout(() => resolve('d'),7000)
+    }).then(data => {
+        console.log(data);
+        console.log('e')
+    })
+
+})
+*/
