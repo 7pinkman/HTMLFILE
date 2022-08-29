@@ -5,8 +5,9 @@ var submitButton=document.getElementById('submit');
 
 
 
-/*
+
 window.addEventListener("DOMContentLoaded", () => {
+    /*
     const localStorageObj = localStorage;
     const localstoragekeys  = Object.keys(localStorageObj)
 
@@ -17,8 +18,25 @@ window.addEventListener("DOMContentLoaded", () => {
         const userDetailsObj = JSON.parse(userDetailsString);
         showNewUserOnScreen(userDetailsObj);
     }
+    */
+
+    axios.get("https://crudcrud.com/api/9e283281ad7146afb6b312ccad75f6f3/appointmentData")
+            .then((responce) => {
+                //console.log(responce);//you can see its a array of objects
+                for(var i=0; i< responce.data.length ; i++){
+                    showNewUserOnScreen(responce.data[i]);
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    //after calling get(),let's say we  got responce after 1 min and in our application 4 get call is there,so is it like 4 min wasted?No,as js waits
+    //for none,its a async call,so after 1 sec the responce came in microstack queue and then event loop do its job,same old concept.
+    //if we write  const data =axios.get("https://crudcrud.com/api/9e283281ad7146afb6b312ccad75f6f3/appointmentData")
+    //and do console.log(data),then in console we only got promise,we did not got any data.
 });
-*/
+    
+
 function showNewUserOnScreen(user)
 {
     const parentNode=document.getElementById('listofpeople');
@@ -72,7 +90,7 @@ submitButton.addEventListener("click", (e) => {
         //localStorage.setItem(emailId , JSON.stringify(obj));
         //console.log(nameId);
        // addNewLineElement(obj);
-       axios.post("https://crudcrud.com/api/733b391797f1461fb189186fe3abc419/appointmentData",obj)
+       axios.post("https://crudcrud.com/api/9e283281ad7146afb6b312ccad75f6f3/appointmentData",obj)
        .then((responce) => { 
         console.log(responce);//check the responce in console
         showNewUserOnScreen(responce.data);
